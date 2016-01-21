@@ -104,11 +104,11 @@
 		\noindent Table \ref{table:SaTF} provides definitions for the signals and transfer functions that will be used for the remainder of Lab X. Common notation will be to exclude the $(s)$ when writing equations i.e. $R(s)$ will be represented as $R$.
 
 	\subsection*{E2}
-		The first transfer of function of interest is from the input $R$ to the output $Y$. This transfer function can be found by setting the disturbance $D$ to zero and chasing the signals from \ref{fig:block}. The reason it is possible to set $D=0$ and find an individual piece of the overall transfer function is due to the principle of superposition.
+		The first transfer of function of interest is from the input $R$ to the output $Y$. This transfer function can be found by setting the disturbance $D$ to zero and chasing the signals from figure \ref{fig:block}. The reason it is possible to set $D=0$ and find an individual piece of the overall transfer function is due to the principle of superposition.
 		\begin{equation}
 			H_{yr}=\frac{Y}{R}=\frac{C*P}{1+C*P}
 		\end{equation}
-		\begin{equation}
+		\begin{equation} \label{eq:Hyr}
 			\mbox{ Substituting in for P yields: } H_{yr}=\frac{C*k}{(s+b)+C*k}
 		\end{equation} 
 	
@@ -117,12 +117,22 @@
 		\begin{equation}
 			H_{yd}=\frac{Y}{D}=\frac{P}{1+C*P}
 		\end{equation}
-		\begin{equation}
+		\begin{equation} \label{eq:Hyd}
 			\mbox{ Substituting in for P yields: } H_{yd}=\frac{k}{(s+b)+C*k}
 		\end{equation}
+
 	\subsection*{E4}
+		The purpose of a feedback control system is to design the controller $C$ in such a manner that the output behaves as desired. A controller that commands an acceleration proportional to the velocity error is proportional feedback. $$u(t)=k_p(r(t)-y(t))$$ This is an example of a negative feedback system. For sections E4-E8 a proportional controller will be used: $$C_p=k_p$$ Substituting this proportional controller into equations \ref{eq:Hyr} and \ref{eq:Hyd} gives the following transfer functions.
+		\begin{equation} \label{eq:propHyr}
+			 H_{yr}=\frac{k_p*k}{(s+b)+k_p*k}
+		\end{equation}
+		\begin{equation} \label{eq:propHyd}
+			H_{yd}=\frac{k}{(s+b)+k_p*k}
+		\end{equation}
+		Examination of these two transfer functions shows that there are no zeros in either case. The poles of the two transfer functions are identical at $s=-b-k_p*k$. In order for the system to be BIBO stable there can be no right-half-plane poles or zeros. For this to be true $$k_p>\frac{-s-b}{k}$$
 
 	\subsection*{E5}
+			
 
 	\subsection*{E6}
 
