@@ -2,6 +2,7 @@
 \usepackage{fullpage}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{color}
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows,positioning,calc}
 \usepackage{float}
@@ -106,33 +107,46 @@
 	\subsection*{E2}
 		The first transfer of function of interest is from the input $R$ to the output $Y$. This transfer function can be found by setting the disturbance $D$ to zero and chasing the signals from figure \ref{fig:block}. The reason it is possible to set $D=0$ and find an individual piece of the overall transfer function is due to the principle of superposition.
 		\begin{equation}
-			H_{yr}=\frac{Y}{R}=\frac{C*P}{1+C*P}
+			H_{yr}=\frac{Y}{R}=\frac{CP}{1+CP}
 		\end{equation}
 		\begin{equation} \label{eq:Hyr}
-			\mbox{ Substituting in for P yields: } H_{yr}=\frac{C*k}{(s+b)+C*k}
+			\mbox{ Substituting in for P yields: } H_{yr}=\frac{Ck}{(s+b)+Ck}
 		\end{equation} 
 	
 	\subsection*{E3}
-		A second transfer function of interest is from the disturbance $D$ to the output $Y$. Once again, the principle of superposition can be utilized to find the desired transfer function $H_{yd}$ by setting $R=0$. In this case, it can be seen that ``$b\geq 0$ indicates dissipation (friction, wind, etc...) and $k\geq 0$ indicates that a positive command should result in an increase in velocity''
+		A second transfer function of interest is from the disturbance $D$ to the output $Y$. Once again, the principle of superposition can be utilized to find the desired transfer function $H_{yd}$. This time the input $R$ is set to 0. In this case, it can be seen that ``$b\geq 0$ indicates dissipation (friction, wind, etc...) and $k\geq 0$ indicates that a positive command should result in an increase in velocity''
 		\begin{equation}
-			H_{yd}=\frac{Y}{D}=\frac{P}{1+C*P}
+			H_{yd}=\frac{Y}{D}=\frac{P}{1+CP}
 		\end{equation}
 		\begin{equation} \label{eq:Hyd}
-			\mbox{ Substituting in for P yields: } H_{yd}=\frac{k}{(s+b)+C*k}
+			\mbox{ Substituting in for P yields: } H_{yd}=\frac{k}{(s+b)+Ck}
 		\end{equation}
 
 	\subsection*{E4}
-		The purpose of a feedback control system is to design the controller $C$ in such a manner that the output behaves as desired. A controller that commands an acceleration proportional to the velocity error is proportional feedback. $$u(t)=k_p(r(t)-y(t))$$ This is an example of a negative feedback system. For sections E4-E8 a proportional controller will be used: $$C_p=k_p$$ Substituting this proportional controller into equations \ref{eq:Hyr} and \ref{eq:Hyd} gives the following transfer functions.
+		The purpose of a feedback control system is to design the controller $C$ in such a manner that the output behaves as desired. A controller that commands an acceleration proportional to the velocity error is proportional feedback. $$u(t)=k_p(r(t)-y(t))$$ This is an example of a negative feedback system. For sections E4-E8 a proportional controller will be used: $$C=C_p=k_p$$ Substituting this proportional controller into equations \ref{eq:Hyr} and \ref{eq:Hyd} gives the following transfer functions.
 		\begin{equation} \label{eq:propHyr}
-			 H_{yr}=\frac{k_p*k}{(s+b)+k_p*k}
+			 H_{yr}=\frac{k_pk}{(s+b)+k_pk}
 		\end{equation}
 		\begin{equation} \label{eq:propHyd}
-			H_{yd}=\frac{k}{(s+b)+k_p*k}
+			H_{yd}=\frac{k}{(s+b)+k_pk}
 		\end{equation}
-		Examination of these two transfer functions shows that there are no zeros in either case. The poles of the two transfer functions are identical at $s=-b-k_p*k$. In order for the system to be BIBO stable there can be no right-half-plane poles or zeros. For this to be true $$k_p>\frac{-s-b}{k}$$
+		Examination of these two transfer functions shows that there are no zeros in either case. The poles of the two transfer functions are identical at $s=-b-k_pk$. In order for the system to be BIBO stable there can be no right-half-plane poles or zeros. For this to be true $$k_p>\frac{-s-b}{k}$$
 
 	\subsection*{E5}
-			
+		Another useful piece of information is the impulse response of $H_{yr}$. The impulse response $h_{yr}(t)$ can be found by taking the inverse laplace transform of $H_{yr}$.
+		\begin{align}
+			H_{yr}&=\frac{k_pk}{(s+b)+k_pk}=(k_pk)\frac{1}{s-(-b-k_pk)} \\
+			h(t)&=\mathcal{L}^{-1}\{H_{yr}\} = k_pk\exp\{{-t(b+k_pk)}\} \label{eq:imp}
+		\end{align} 		
+		The impulse response found in equation \ref{eq:imp} can be used to find the time constant of the system. Equation \ref{eq:imp} is of the form $e^{-t/\tau}$, where $\tau$ is the time constant of interest. 
+		\begin{equation} \label{eq:tconst}
+			\mbox{ time const. }\frac{1}{\tau}=(b+k_pk)\implies \tau=\frac{1}{(b+k_pk)}
+		\end{equation}
+		For a desired time constant of 2 seconds a suitable value of $k_p$ for the proportional controller is:
+		\begin{equation} \label{eq:2stau}
+			k_p=\frac{1-2b}{2k}
+		\end{equation}
+		\textcolor{red}{!!! A suitable time constant for the torsion disc system is: !!!}
 
 	\subsection*{E6}
 
