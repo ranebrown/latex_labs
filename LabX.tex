@@ -1,6 +1,7 @@
 \documentclass[11pt,titlepage]{article}
 \usepackage{fullpage}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows,positioning,calc}
 \usepackage{float}
@@ -103,7 +104,11 @@
 		\noindent Table \ref{table:SaTF} provides definitions for the signals and transfer functions that will be used for the remainder of Lab X. Common notation will be to exclude the $(s)$ when writing equations i.e. $R(s)$ will be represented as $R$.
 
 	\subsection*{E2}
-
+		The first transfer of function of interest is from the input $R$ to the output $Y$. This transfer function can be found by setting the distrubance $D$ to zero and chasing the signals from \ref{fig:block}. The reason it is possible to set $D=0$ and find an individual piece of the overall transfer function is due to the principle of superpostion.
+		\begin{equation}
+			H_{yr}=\frac{Y}{R}=\frac{C*P}{1+C*P}
+		\end{equation}
+	
 	\subsection*{E3}
 
 	\subsection*{E4}
