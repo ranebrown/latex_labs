@@ -23,16 +23,16 @@
 \maketitle
 
 \section*{Purpose}
-	Lab X is designed to review the basics of feedback control. This will be accomplished through a series of procedures that analyze a cruise control system. The end goal of this project is to gain enough knowledge and background infromation to create a feasible control solution for use with the torsion disk system.
+	Lab X is designed to review the basics of feedback control. This will be accomplished through a series of procedures that analyze a cruise control system. The end goal of this project is to gain enough knowledge and background information to create a feasible control solution for use with the torsion disk system.
 
 \section*{Background}
-	Feedback is important in nature and technology. Withouth feedback life as we know it would not exist and the technological marvels that exits today would not be possible. There are numerous example of existing feedback systems but a few of the most important are listed below.
+	Feedback is important in nature and technology. Without feedback life as we know it would not exist and the technological marvels that exits today would not be possible. There are numerous example of existing feedback systems but a few of the most important are listed below.
 
 	\subsection*{E1}
 		\begin{enumerate}
 			\item Airplane: The autopilot can be set to maintain a level orientation at a given altitude. Disturbances in the air may cause the wings to dip and this movement is read by a gyroscope. The information from the gyroscope is read by the control system and adjustments are made to the ailerons to bring the plane back to a level orientation.
-			\item Thermostat: The user can select a desired temperature and the thermostat will compare this value to the measured temperature. If hot air from outside the house raises the temperature above the set value the ac will be activiated. 
-			\item Climate change: Greenhouse gases increase the Earth's temperature and this rise in temperature increases water vapor in the air. The increase in water vapor further increses the Earth's temperature. In addition, there is ice albedo feedback where the reduction of ice due to melting reduces the amount of reflected radiation and therefore the surface temperature rises which leads to further ice melting.
+			\item Thermostat: The user can select a desired temperature and the thermostat will compare this value to the measured temperature. If hot air from outside the house raises the temperature above the set value the ac will be activated. 
+			\item Climate change: Greenhouse gases increase the Earth's temperature and this rise in temperature increases water vapor in the air. The increase in water vapor further increases the Earth's temperature. In addition, there is ice albedo feedback where the reduction of ice due to melting reduces the amount of reflected radiation and therefore the surface temperature rises which leads to further ice melting.
 			\item Metabolism: The metabolism of an animal is adjusted depending on food intake. As the food intake decreases the metabolism slows and vice versa.
 		\end{enumerate}
 
@@ -104,13 +104,22 @@
 		\noindent Table \ref{table:SaTF} provides definitions for the signals and transfer functions that will be used for the remainder of Lab X. Common notation will be to exclude the $(s)$ when writing equations i.e. $R(s)$ will be represented as $R$.
 
 	\subsection*{E2}
-		The first transfer of function of interest is from the input $R$ to the output $Y$. This transfer function can be found by setting the distrubance $D$ to zero and chasing the signals from \ref{fig:block}. The reason it is possible to set $D=0$ and find an individual piece of the overall transfer function is due to the principle of superpostion.
+		The first transfer of function of interest is from the input $R$ to the output $Y$. This transfer function can be found by setting the disturbance $D$ to zero and chasing the signals from \ref{fig:block}. The reason it is possible to set $D=0$ and find an individual piece of the overall transfer function is due to the principle of superposition.
 		\begin{equation}
 			H_{yr}=\frac{Y}{R}=\frac{C*P}{1+C*P}
 		\end{equation}
+		\begin{equation}
+			\mbox{ Substituting in for P yields: } H_{yr}=\frac{C*k}{(s+b)+C*k}
+		\end{equation} 
 	
 	\subsection*{E3}
-
+		A second transfer function of interest is from the disturbance $D$ to the output $Y$. Once again, the principle of superposition can be utilized to find the desired transfer function $H_{yd}$ by setting $R=0$. In this case, it can be seen that ``$b\geq 0$ indicates dissipation (friction, wind, etc...) and $k\geq 0$ indicates that a positive command should result in an increase in velocity''
+		\begin{equation}
+			H_{yd}=\frac{Y}{D}=\frac{P}{1+C*P}
+		\end{equation}
+		\begin{equation}
+			\mbox{ Substituting in for P yields: } H_{yd}=\frac{k}{(s+b)+C*k}
+		\end{equation}
 	\subsection*{E4}
 
 	\subsection*{E5}
