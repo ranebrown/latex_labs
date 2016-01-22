@@ -149,12 +149,91 @@
 		\textcolor{red}{!!! A suitable time constant for the torsion disc system is: !!!}
 
 	\subsection*{E6}
-
+		We can model the cruise control system in Simulink, using proportional controller $$C=C_p=k_p+k_I\frac{1}{s}$$ First we experiment with a step reference input at $t=1: r(t)=1(t-1)$ and a disturbance input $d(t)=0$. The results of this simulation are shown in the plot below. 
+		
+		\textcolor{red}{! insert simulink plot here !}
+		
+		Next we introduce a step disturbance input at $t=2: d(t)=1(t-2)$ and zero reference input. The results of the simulation are plotted below.
+		
+		\textcolor{red}{! insert simulink plot here !}
+		
+		If we apply both a step reference input $r(t)=1(t-1)$ and a step disturbance $d(t)=1(t-2)$, we see that
+		
+		\textcolor{red}{! discussion and simulink plot here !}
+		
 	\subsection*{E7}
-
+		To determine the system's steady state error with respect to disturbance rejection, we use transfer function 
+		\begin{equation}
+			H_{ed}=\frac{E}{D}=\frac{-P}{1+CP}
+		\end{equation}
+		\begin{equation}\label{eq:propHed}
+			\mbox{ Substituting in for C and P yields: } H_{ed}=\frac{-k}{(s+b)+k_pk}
+		\end{equation}
+		The steady state error with respect to the disturbance can be found using the final value theorem: 
+		\begin{equation}
+			\lim_{t\to\infty}e(t)=\lim_{s\to0}sE(s)
+		\end{equation}
+		When $r(t)=0$ and $d(t)=1(t)$, the error is
+		\begin{equation}
+			e_{ss}=\lim_{s\to0}s\frac{E}{D}D=\lim_{s\to0}s\frac{-k}{s+b+k_pk}\frac{1}{s}=\frac{-k}{b+k_pk}
+		\end{equation}
+		when we assume $k_p$ is in the stability range, i.e. $k_p > \frac{-b}{k}$. \\\\
+		If we include a nonzero reference input, e.g. $r(t)=1(t)$, the error signal is no longer $E=-Y$; we must now include the reference signal in calculations of transfer function $H_{ed}'=\frac{E}{D}$:
+		\begin{equation}
+			H_{ed}'=\frac{E}{D}=\frac{-(s+b+k)}{s+b+k_pk}
+		\end{equation}
+		So with a nonzero reference input our steady state error with respect to disturbance becomes
+		\begin{equation}
+			e_{ss}=\lim_{s\to0}s\frac{-(s+b+k)}{s+b+k_pk}\frac{1}{s}=\frac{-(b+k)}{b+k_pk}
+			\end{equation}
+		while there is an additional term in the numerator, the error remains finite and the system type with respect to disturbance rejection does not change. By choosing $k_p$ arbitrarily large this error can be made zero.\\\\
+		
+		For a constant acceleration disturbance input the steady state error cannot be made zero. The steady state error in this case becomes
+		$$e_{ss}=\lim_{s\to0}s\frac{-(s+b+k)}{s+b+k_pk}\frac{1}{s^2} =\infty$$
+		
+		This result was verified via simulation in Simulink; plots for error output with large $k_p$ are included below. \\
+		\textcolor{red}{!! include simulink plot of error signal with large Kp!}
+		
 	\subsection*{E8}
+		The result observed for a constant acceleration input is similar to that observed for actuator or measurement biases. An actuator bias does not allow accurate knowledge of the transfer function $H_yr$, thus additional nonzero error is introduced. Similarly, Measurement bias does not allow accurate knowledge of the error signal. $E\neq R-Y$; an additional error noise function is introduced but not accounted for by our model. To account for these biases in our system we could include additional blocks for actuator and measurement bias, $B(s)$ and $H(s)$, respectfully, as shown below.
+	
+		\begin{figure}[!htb]
+	\centering
+	\begin{tikzpicture}[auto, node distance=2cm,>=latex']
+		\node [input, name=rinput] (rinput) {R(s)};
+		\node [sum, right of=rinput, node distance=1.5cm] (sum1) {};
+		\node [coord, below of=sum1, node distance=1.5cm] (fdbk1) {};
+		\node [block, right of=sum1] (controller) {C(s)};
+		\node [block, right of=controller, node distance=2.5cm] (actbias) {B(s)};
+		\node [sum, right of=actbias, node distance=2cm] (sum2) {};
+		\node [block, right of=sum2, node distance=2cm] (plant) {P(s)};
+		\node [coord, right of=plant, node distance=1cm] (fdbk2) {};
+		\node [coord, below of=fdbk2, node distance=1.5cm] (fdbk3) {};
+		\node [coord, left of=fdbk3, node distance=2cm] (fdbk4) {};
+		\node [block, left of=fdbk4, node distance = 2cm] (measbias){H(s)};
+		\node [input, above of=sum2, node distance=1.5cm] (disturbance) {$D(s)$};
+		\node [output, right of=plant, node distance=2.5cm] (output) {Y(s)=V(s)};
+		\draw [->] (rinput) -- node[xshift=.2cm]{$+$} (sum1);
+		\draw [->] (disturbance) -- node[xshift=-.5cm]{$+$} (sum2);
+		\draw [->] (sum1) --node {E(s)} (controller);
+		\draw [->] (controller) -- node{U(s)}(actbias);
+		\draw [->] (actbias) --  node{$+$}(sum2);
+		\draw [->] (sum2) -- node{A(s)} (plant);
+		\draw [->] (plant) -- node {}(output);
+		\draw [-] (fdbk2) -- (fdbk3);
+		\draw [-] (fdbk3) -- (fdbk4);
+		\draw [->] (fdbk4) -- (measbias);
+		\draw [-] (measbias) -- (fdbk1);
+		\draw [->] (fdbk1) -- node[yshift=.2cm]{$-$} (sum1);
+	    \end{tikzpicture}
+	\caption{Cruise Control with Actuator and Measurement Bias} \label{fig:block}
+	\end{figure}
 
 	\subsection*{E9}
+		In order to ensure a cruise control feedback system has zero steady state error in the face of a constant disturbance input, integral feedback can be introduced along with proportional control. The PI controller is now:
+		\begin{equation}
+			C_{PI}=k_p+k_I\frac{1}{s}
+		\end{equation}
 
 	\subsection*{E10}
 
