@@ -231,23 +231,87 @@
 
 	\subsection*{E9}
 		In order to ensure a cruise control feedback system has zero steady state error in the face of a constant disturbance input, integral feedback can be introduced along with proportional control. The PI controller is now:
-		\begin{equation}
-			C_{PI}=k_p+k_I\frac{1}{s}
-		\end{equation}
-
+	\begin{equation}
+		C_{PI}=k_p+k_I\frac{1}{s}
+	\end{equation}
+	With this new controller, we can derive $H_{yr}(s)$ and $H_{yd}(s)$ as follows:
+	\begin{equation}
+		H_{yr}(s)=\frac{C_{PI}P}{1+C_{PI}P}=\frac{(k_p+k_I)s}{s^2+(b+k_pk)s+k_Ik}
+	\end{equation}	
+	\begin{equation}
+		H_{yd}(s)=\frac{P}{1+C_PIP}=\frac{ks}{s^2+(b+k_pk)s+k_Ik}
+	\end{equation}\\
+	$H_{yr}(s)$ and $H_{yd}(s)$ have the same characteristic equation, and thus have common poles as well as a common zero at $s=0$.
+	
 	\subsection*{E10}
-
+	The characteristic polynomial of the system with the new PI controller becomes 
+	\begin{equation}
+		s^2+(b+k_pk)s+k_Ik=0
+	\end{equation}
+	
 	\subsection*{E11}
-
+		We can determine the stability of the system from this characteristic equation using the Routh Stability Criterion:\\\\
+	\newcommand{\tab}[1]{\hspace{.2\textwidth}\rlap{#1}}
+	\tab{$s^2$}  \tab{1} \tab{$k_Ik$}\\
+	\tab{$s^1$} \tab{$b+k_p$} \tab{0}\\
+	\tab{$s^0$} \tab{$k_Ik$} \tab{0}\\\\ 
+	For the system to be BIBO stable, we need
+	\begin{equation}
+		b+k_p>0\implies k_p>-b
+	\end{equation}
+	\begin{equation}
+		k_Ik>0\implies k_I>0
+	\end{equation}
+	for $k>0$
+	
 	\subsection*{E12}
-
+		Assuming both $k_p$ and $k_I$ are within the region for system stability, we can determine the steady state error of the system with a PI controller for a step disturbance input $d(t)=1(t)$ and zero reference input $r(t)=0$:
+	\begin{align}
+		e_{ss}&=\lim_{t\to \infty}e(t)=\lim_{s\to 0}sE(s)\\
+		&=\lim_{s\to 0}\frac{-ks}{s^2+(b+k_pk)s+k_ik}=0
+	\end{align}
+	The system can reject a constant disturbance input perfectly, with zero steady state error. 
+	
 	\subsection*{E13}
-
+	\textcolor{red}{!Simulink plots from PI controller here!}
+	
 	\subsection*{E14}
-
+		The introduction of an integrator means we must now consider other aspects of the transient response in addition to steady state error. Overshoot and damping are must be considered as well for a well-functioning system. To more easily understand how our chosen parameters $k_p$ and $k_I$, affect overshoot and damping, we consider the characteristic equation in the form 
+	\begin{equation}
+		s^2+2\xi\omega_ns+\omega_n^2
+	\end{equation} 
+	where $\omega_n$ is the natural frequency and $\xi$ is the damping ratio.
+	Both $k_p$ and $k_I$ can be determined in terms of $\omega_n$ and $\xi$:
+	\begin{equation}
+		b+k_pk=2\xi \omega_n \implies k_p=\frac{2\xi \omega_n-b}{k}
+	\end{equation}
+	\begin{equation}
+		k_Ik=\omega_n^2 \implies k_i=\frac{\omega_n^2}{k}
+	\end{equation}
+	For the system to be stable, we need $\xi >0$ and $\omega_N >0$. This agrees with the stability region we obtained from using Routh's Stability Criterion, we need $k_Ik>0$ and $k_pk+b>0$ for stability.
+	
 	\subsection*{E15}
-
+		If we consider an experiment that began long before time $t=0$ with $r(t)=0$ and $d(t)=1(-t)$ and assume all signals are constant at $t=0$, we can verify that for $t=0$, we have signals\\
+		$e(t)=0$, $u(t)=-1$, $a(t)=0$, and $y(t)=0$.
+	Since we assume we are using PI control for the system, there will be zero steady state error, so we know that $e(t)=0$ at $t=0$. Furthermore, 
+	\begin{align*}
+		y(t)&=\mathcal{L}^{-1}Y(s)=\mathcal{L}^{-1}E(s)-R(s)=0\\
+		u(t)&=\mathcal{L}^{-1}A(s)=\mathcal{L}^{-1}(Y(s)-D(s))\\
+		&=0--(-1)\\
+		&=-1\\
+		a(t)&=\mathcal{L}^{-1}A(s)=\mathcal{L}^{-1}(U(s)+D(s))=0
+	\end{align*}
+	Our disturbance input becomes 0 at $t=0$, and again, because we have a PI controller, as $t\to \infty$, with $d(t)=0$ for $t>0$, $e(t)$ will be 0, and thus $u(t)\to0$, $y(t)\to0$ and $a(t)\to0$:
+	\begin{align*}
+		y(t)&=\mathcal{L}^{-1}Y(s)=\mathcal{L}^{-1}E(s)-R(s)=0\\
+		u(t)&=\mathcal{L}^{-1}A(s)=\mathcal{L}^{-1}(Y(s)-D(s))=0\\
+		a(t)&=\mathcal{L}^{-1}A(s)=\mathcal{L}^{-1}(U(s)+D(s))=0
+	\end{align*}
+	
 	\subsection*{E16}
+		A cruise control system should provide zero steady state error for both tracking a constant velocity reference and rejecting constant acceleration disturbances, hills and bumps for example. Additionally, the response should be quick, but not so fast that a the system does not ensure a smooth acceleration. Thus, if a step function is applied as the reference input, the system should not seek to match that input exactly. Other considerations include good damping - the speed should increase or decrease to meet the constant reference, then remain steady, with minimal oscillations, as well as little to no overshoot - we don't want the user to get a speeding ticket.\\\\
+		For such a system, a value of $k_p=??$ and $k_I=?$ will provide the $e_{ss}=0$ for tracking a constant input and rejecting disturbances, a suitable rise time, good damping and little overshoot. 
+		\textcolor{red}{!insert specific parameter values and simulink plots here!}
 
 	\subsection*{E17}
 
