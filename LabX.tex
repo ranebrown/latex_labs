@@ -135,7 +135,7 @@
 		Examination of these two transfer functions shows that there are no zeros in either case. The poles of the two transfer functions are identical at $s=-b-k_pk$. In order for the system to be BIBO stable there can be no right-half-plane poles or zeros. For this to be true $$k_p>\frac{-s-b}{k}$$
 
 	\subsection*{E5}
-		Another useful piece of information is the impulse response of $H_{yr}$. The impulse response $h_{yr}(t)$ can be found by taking the inverse laplace transform of $H_{yr}$.
+		Another useful piece of information is the impulse response of $H_{yr}$. The impulse response $h_{yr}(t)$ can be found by taking the inverse Laplace transform of $H_{yr}$.
 		\begin{align}
 			H_{yr}&=\frac{k_pk}{(s+b)+k_pk}=(k_pk)\frac{1}{s-(-b-k_pk)} \\
 			h(t)&=\mathcal{L}^{-1}\{H_{yr}\} = k_pk\exp\{{-t(b+k_pk)}\} \label{eq:imp}
@@ -148,29 +148,29 @@
 		\begin{equation} \label{eq:2stau}
 			k_p=\frac{1-2b}{2k}
 		\end{equation}
-		\textcolor{red}{!!! A suitable time constant for the torsion disc system is: !!!}
+		A suitable time constant for the torsion disc system is less than 0.5 seconds.
 
 	\subsection*{E6}
 		We can model the cruise control system in Simulink, using proportional controller $$C=C_p=k_p+k_I\frac{1}{s}$$ First we experiment with a step reference input at $t=1: r(t)=1(t-1)$ and a disturbance input $d(t)=0$. The results of this simulation are shown in the plot below. top left = r(t) and d(t), top right = u(t), bottom left = e(t), bottom right = y(t)
 		\begin{figure}[H]
 			\centering
 			\includegraphics[scale=0.3]{e6-1}
-			\caption{Step Reference 0 Distrubance}
+			\caption{Step Reference 0 Disturbance}
 		\end{figure}
 		
 		Next we introduce a step disturbance input at $t=2: d(t)=1(t-2)$ and zero reference input. The results of the simulation are plotted below. top left = r(t) and d(t), top right = u(t), bottom left = e(t), bottom right = y(t)
 		\begin{figure}[H]
 			\centering
 			\includegraphics[scale=0.3]{e6-2}
-			\caption{0 Reference Step Distrubance}
+			\caption{0 Reference Step Disturbance}
 		\end{figure}	
 		
-		If we apply both a step reference input $r(t)=1(t-1)$ and a step disturbance $d(t)=1(t-2)$, we see that \textcolor{red}{! discussion here !}
+		If we apply both a step reference input $r(t)=1(t-1)$ and a step disturbance $d(t)=1(t-2)$, we see that there is the initial system response and a second response to the disturbance.
 		top left = r(t) and d(t), top right = u(t), bottom left = e(t), bottom right = y(t)
 		\begin{figure}[H]
 			\centering
 			\includegraphics[scale=0.3]{e6-3}
-			\caption{Step Reference Step Distrubance}
+			\caption{Step Reference Step Disturbance}
 		\end{figure}
 		
 	\subsection*{E7}
@@ -209,7 +209,7 @@
 			\includegraphics[scale=0.3]{e7}
 			\caption{Error for large $k_p$}
 		\end{figure}
-		When there is a measurment and/or acutation bias a similiar effect can be observed when looking at the error signal. This is because \textcolor{red}{! why??? !}
+		When there is a measurement and/or actuation bias a similar effect can be observed when looking at the error signal. An additional bias is in the feedback path can be analyzed using superposition and it can be shown the the steady state error changes in a similar manner.
 		
 	\subsection*{E8}
 		The result observed for a constant acceleration input is similar to that observed for actuator or measurement biases. An actuator bias does not allow accurate knowledge of the transfer function $H_yr$, thus additional nonzero error is introduced. Similarly, Measurement bias does not allow accurate knowledge of the error signal. $E\neq R-Y$; an additional error noise function is introduced but not accounted for by our model. To account for these biases in our system we could include additional blocks for actuator and measurement bias, $B(s)$ and $H(s)$, respectfully, as shown below.
@@ -290,7 +290,7 @@
 	The system can reject a constant disturbance input perfectly, with zero steady state error. 
 	
 	\subsection*{E13}
-	A PI controller can be used in simulink to view the effects for different values of $k_I$. As $k_I$ is increased the rise time decreases but the overshoot and settle time both increase. The advantage of adding integral control is that steady state error can be eliminated for a step or ramp input. Below is a snapshot of the modified system in simulink as well as plots for various values of $k_I$.
+	A PI controller can be used in Simulink to view the effects for different values of $k_I$. As $k_I$ is increased the rise time decreases but the overshoot and settle time both increase. The advantage of adding integral control is that steady state error can be eliminated for a step or ramp input. Below is a snapshot of the modified system in Simulink as well as plots for various values of $k_I$.
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=0.3]{e13-1}
@@ -342,9 +342,14 @@
 	
 	\subsection*{E16}
 		A cruise control system should provide zero steady state error for both tracking a constant velocity reference and rejecting constant acceleration disturbances, hills and bumps for example. Additionally, the response should be quick, but not so fast that a the system does not ensure a smooth acceleration. Thus, if a step function is applied as the reference input, the system should not seek to match that input exactly. Other considerations include good damping - the speed should increase or decrease to meet the constant reference, then remain steady, with minimal oscillations, as well as little to no overshoot - we don't want the user to get a speeding ticket.\\\\
-		For such a system, a value of $k_p=??$ and $k_I=?$ will provide the $e_{ss}=0$ for tracking a constant input and rejecting disturbances, a suitable rise time, good damping and little overshoot. 
-		\textcolor{red}{!insert specific parameter values and simulink plots here!}
-
-	\subsection*{E17}
+		For such a system, a value of $k_p=20$ and $k_I=5$ will provide the $e_{ss}=0$ for tracking a constant input and rejecting disturbances, a suitable rise time, good damping and little overshoot. 
+		\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.3]{e16}
+		\caption{Good $k_I$ and $k_p$ values}
+	\end{figure}
+		
+	\subsection*{E17+}
+		The goal of this project was to explore different control systems for a basic cruise control system. The above equations and simulations show that a PI controller works well for obtaining a quick rise and limiting overshoot. These ideas can be incorporated into the torsion disc system where a motor will be used to drive the discs. 
 
 \end{document}
