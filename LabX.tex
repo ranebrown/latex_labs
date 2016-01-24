@@ -1,8 +1,10 @@
-\documentclass[11pt,titlepage]{article}
+\documentclass[10pt,titlepage]{article}
 \usepackage{fullpage}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{color}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows,positioning,calc}
 \usepackage{float}
@@ -40,7 +42,7 @@
 \section*{Procedure}
 	A simple example of a feedback system that has wide spread real world application is cruise control. The most common example of this appears in vehicles. The driver can set the desired speed and the feedback system will maintain that speed in the presence of disturbances such as wind and hills. \\
 
-	\begin{figure}[!htb]
+	\begin{figure}[H]
 	\centering
 	\begin{tikzpicture}[auto, node distance=2cm,>=latex']
 		\node [input, name=rinput] (rinput) {R(s)};
@@ -68,7 +70,7 @@
 
 	\noindent As seen in Figure \ref{fig:block} there are two inputs signal to the cruise control feedback system: the reference $R(s)$ and the disturbance $D(s)$. There is one output signal $Y(s)$ for this system but there are many other points of interest as labeled in Figure \ref{fig:block}. With these signals many useful transfer functions can be derived that will help in the selection of an appropriate controller $C(s)$. The selection for $C(s)$ is dependent on many factors including desired rise time, settle time, overshoot, and steady state error. \\
 
-	\begin{table}[!htb]
+	\begin{table}[H]
 		\centering
 		\begin{tabular}{|m{5cm}|m{9cm}|} 
 		\hline
@@ -149,17 +151,27 @@
 		\textcolor{red}{!!! A suitable time constant for the torsion disc system is: !!!}
 
 	\subsection*{E6}
-		We can model the cruise control system in Simulink, using proportional controller $$C=C_p=k_p+k_I\frac{1}{s}$$ First we experiment with a step reference input at $t=1: r(t)=1(t-1)$ and a disturbance input $d(t)=0$. The results of this simulation are shown in the plot below. 
+		We can model the cruise control system in Simulink, using proportional controller $$C=C_p=k_p+k_I\frac{1}{s}$$ First we experiment with a step reference input at $t=1: r(t)=1(t-1)$ and a disturbance input $d(t)=0$. The results of this simulation are shown in the plot below. top left = r(t) and d(t), top right = u(t), bottom left = e(t), bottom right = y(t)
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.3]{e6-1}
+			\caption{Step Reference 0 Distrubance}
+		\end{figure}
 		
-		\textcolor{red}{! insert simulink plot here !}
+		Next we introduce a step disturbance input at $t=2: d(t)=1(t-2)$ and zero reference input. The results of the simulation are plotted below. top left = r(t) and d(t), top right = u(t), bottom left = e(t), bottom right = y(t)
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.3]{e6-2}
+			\caption{0 Reference Step Distrubance}
+		\end{figure}	
 		
-		Next we introduce a step disturbance input at $t=2: d(t)=1(t-2)$ and zero reference input. The results of the simulation are plotted below.
-		
-		\textcolor{red}{! insert simulink plot here !}
-		
-		If we apply both a step reference input $r(t)=1(t-1)$ and a step disturbance $d(t)=1(t-2)$, we see that
-		
-		\textcolor{red}{! discussion and simulink plot here !}
+		If we apply both a step reference input $r(t)=1(t-1)$ and a step disturbance $d(t)=1(t-2)$, we see that \textcolor{red}{! discussion here !}
+		top left = r(t) and d(t), top right = u(t), bottom left = e(t), bottom right = y(t)
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.3]{e6-3}
+			\caption{Step Reference Step Distrubance}
+		\end{figure}
 		
 	\subsection*{E7}
 		To determine the system's steady state error with respect to disturbance rejection, we use transfer function 
@@ -192,12 +204,17 @@
 		$$e_{ss}=\lim_{s\to0}s\frac{-(s+b+k)}{s+b+k_pk}\frac{1}{s^2} =\infty$$
 		
 		This result was verified via simulation in Simulink; plots for error output with large $k_p$ are included below. \\
-		\textcolor{red}{!! include simulink plot of error signal with large Kp!}
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.3]{e7}
+			\caption{Error for large $k_p$}
+		\end{figure}
+		When there is a measurment and/or acutation bias a similiar effect can be observed when looking at the error signal. This is because \textcolor{red}{! why??? !}
 		
 	\subsection*{E8}
 		The result observed for a constant acceleration input is similar to that observed for actuator or measurement biases. An actuator bias does not allow accurate knowledge of the transfer function $H_yr$, thus additional nonzero error is introduced. Similarly, Measurement bias does not allow accurate knowledge of the error signal. $E\neq R-Y$; an additional error noise function is introduced but not accounted for by our model. To account for these biases in our system we could include additional blocks for actuator and measurement bias, $B(s)$ and $H(s)$, respectfully, as shown below.
 	
-		\begin{figure}[!htb]
+		\begin{figure}[H]
 	\centering
 	\begin{tikzpicture}[auto, node distance=2cm,>=latex']
 		\node [input, name=rinput] (rinput) {R(s)};
@@ -273,7 +290,22 @@
 	The system can reject a constant disturbance input perfectly, with zero steady state error. 
 	
 	\subsection*{E13}
-	\textcolor{red}{!Simulink plots from PI controller here!}
+	A PI controller can be used in simulink to view the effects for different values of $k_I$. As $k_I$ is increased the rise time decreases but the overshoot and settle time both increase. The advantage of adding integral control is that steady state error can be eliminated for a step or ramp input. Below is a snapshot of the modified system in simulink as well as plots for various values of $k_I$.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.3]{e13-1}
+		\caption{Simulink Model}
+	\end{figure}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.3]{e13-2}
+		\caption{Small $k_I$}
+	\end{figure}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.3]{e13-3}
+		\caption{Large $k_I$}
+	\end{figure}
 	
 	\subsection*{E14}
 		The introduction of an integrator means we must now consider other aspects of the transient response in addition to steady state error. Overshoot and damping are must be considered as well for a well-functioning system. To more easily understand how our chosen parameters $k_p$ and $k_I$, affect overshoot and damping, we consider the characteristic equation in the form 
